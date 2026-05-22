@@ -1,0 +1,22 @@
+[
+    {
+        "model": "agri_store.product",
+        "fields": {
+            "name": "قمح",
+            "category": "حبوب",
+            "description": "حبوب قمح عالية الجودة",
+            "price": "100.00",
+            "quantity_in_stock": 500
+        }
+    },
+    {
+        "model": "agri_store.product",
+        "fields": {
+            "name": "Wheat",
+            "category": "Grains",
+            "description": "Premium quality wheat grains",
+            "price": "100.00",
+            "quantity_in_stock": 500
+        }
+    }
+]
