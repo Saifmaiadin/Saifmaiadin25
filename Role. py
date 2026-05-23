@@ -1,0 +1,5 @@
+# أضف في السكريبت الذي يملأ الأدوار
+Role.objects.get_or_create(name='مدير مشتريات', scope='location_only', permissions={
+    'supplier': ['read', 'create', 'update'],
+    'purchase_order': ['read', 'create', 'update', 'approve'],
+})
