@@ -1,0 +1,6 @@
+POST /api/branches إضافة فرع/مصنع جديد
+GET /api/branches/tree جلب الهيكل الشجري كامل
+POST /api/employees إضافة موظف
+GET /api/employees/by-branch/{id} جلب موظفي فرع معين
+POST /api/users/assign-role تعيين دور لمستخدم
+GET /api/users/permissions/{userId} جلب صلاحيات المستخدم (تُستخدم في الواجهة الأمامية لإخفاء/إظهار العناصر)
