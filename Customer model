@@ -1,0 +1,42 @@
+# customers/models.py
+from django.db import models
+from locations.models import Location
+from employees.models import Employee
+
+class CustomerCategory(models.TextChoices):
+    RETAIL = 'retail', 'فردي'
+    CORPORATE = 'corporate', 'شركة'
+    INSTITUTIONAL = 'institutional', 'مؤسسي'
+
+class Customer(models.Model):
+    # معلومات أساسية
+    name = models.CharField(max_length=255)
+    category = models.CharField(max_length=20, choices=CustomerCategory.choices, default=CustomerCategory.RETAIL)
+    tax_id = models.CharField(max_length=50, blank=True, null=True)  # الرقم الضريبي
+    phone = models.CharField(max_length=20)
+    email = models.EmailField()
+    address = models.TextField()
+    
+    # العلاقات التنظيمية
+    responsible_branch = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, related_name='customers')
+    account_manager = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=True)
+    
+    # بيانات مالية واستثمارية
+    credit_limit = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+    is_active = models.BooleanField(default=True)
+    
+    # توثيق
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+class CustomerContactPerson(models.Model):
+    """شخص تواصل داخل العميل (للشركات)"""
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='contacts')
+    full_name = models.CharField(max_length=255)
+    job_title = models.CharField(max_length=255, blank=True)
+    phone = models.CharField(max_length=20)
+    email = models.EmailField()
+    is_primary = models.BooleanField(default=False)
