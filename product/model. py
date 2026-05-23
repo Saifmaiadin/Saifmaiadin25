@@ -1,0 +1,44 @@
+# products/models.py
+from django.db import models
+from locations.models import Location
+
+class ProductCategory(models.Model):
+    name = models.CharField(max_length=255)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    description = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.name
+
+class Product(models.Model):
+    # معلومات أساسية
+    name = models.CharField(max_length=255)
+    sku = models.CharField(max_length=100, unique=True)  # رمز المنتج
+    category = models.ForeignKey(ProductCategory, on_delete=models.SET_NULL, null=True)
+    description = models.TextField(blank=True)
+    
+    # التسعير والمخزون
+    unit_price = models.DecimalField(max_digits=12, decimal_places=2)
+    cost_price = models.DecimalField(max_digits=12, decimal_places=2)
+    stock_quantity = models.IntegerField(default=0)
+    min_stock_level = models.IntegerField(default=0)
+    
+    # الإنتاج والتوريد
+    manufactured_by = models.ForeignKey(Location, on_delete=models.SET_NULL, null=True, blank=True, limit_choices_to={'location_type': 'factory'}, related_name='manufactured_products')
+    primary_supplier = models.ForeignKey('suppliers.Supplier', on_delete=models.SET_NULL, null=True, blank=True)  # سننشئ نموذج الموردين لاحقًا
+    
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} ({self.sku})"
+
+class Service(models.Model):
+    """خدمات استثمارية (مثل إدارة محافظ، استشارات)"""
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    fee_structure = models.JSONField(default=dict)  # مثلاً {"management_fee": 0.02, "performance_fee": 0.1}
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
