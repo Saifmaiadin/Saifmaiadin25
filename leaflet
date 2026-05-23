@@ -1,0 +1,21 @@
+import { useState, useEffect } from 'react';
+
+function BranchSelector() {
+  const [branches, setBranches] = useState([]);
+  const [selectedBranch, setSelectedBranch] = useState(null);
+
+  useEffect(() => {
+    fetch('/api/branches/tree')
+      .then(res => res.json())
+      .then(data => setBranches(data));
+  }, []);
+
+  return (
+    <select onChange={(e) => setSelectedBranch(e.target.value)}>
+      <option value="">الفرع الرئيسي</option>
+      {branches.map(branch => (
+        <option key={branch.id} value={branch.id}>{branch.name}</option>
+      ))}
+    </select>
+  );
+}
