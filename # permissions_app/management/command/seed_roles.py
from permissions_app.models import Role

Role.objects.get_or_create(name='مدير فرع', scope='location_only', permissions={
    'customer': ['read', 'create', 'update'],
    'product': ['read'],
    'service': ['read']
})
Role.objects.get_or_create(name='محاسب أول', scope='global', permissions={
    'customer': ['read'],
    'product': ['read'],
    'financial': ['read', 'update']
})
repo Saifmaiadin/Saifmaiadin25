@@ -1,0 +1,13 @@
+# permissions_app/management/commands/seed_roles.py
+from permissions_app.models import Role
+
+Role.objects.get_or_create(name='مدير فرع', scope='location_only', permissions={
+    'customer': ['read', 'create', 'update'],
+    'product': ['read'],
+    'service': ['read']
+})
+Role.objects.get_or_create(name='محاسب أول', scope='global', permissions={
+    'customer': ['read'],
+    'product': ['read'],
+    'financial': ['read', 'update']
+})
