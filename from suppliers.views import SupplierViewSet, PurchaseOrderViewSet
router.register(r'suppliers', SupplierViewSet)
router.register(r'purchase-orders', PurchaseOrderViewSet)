@@ -1,0 +1,3 @@
+from suppliers.views import SupplierViewSet, PurchaseOrderViewSet
+router.register(r'suppliers', SupplierViewSet)
+router.register(r'purchase-orders', PurchaseOrderViewSet)
