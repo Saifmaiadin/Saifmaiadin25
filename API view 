@@ -1,0 +1,27 @@
+# employees/views.py
+from rest_framework import viewsets, serializers
+from .models import Employee
+from permissions_app.permissions import HasRolePermission
+
+class EmployeeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Employee
+        fields = '__all__'
+
+class EmployeeViewSet(viewsets.ModelViewSet):
+    serializer_class = EmployeeSerializer
+    permission_classes = [HasRolePermission]
+    required_resource = 'employee'
+    required_action = 'read'
+
+    def get_queryset(self):
+        user = self.request.user
+        # إذا كان المستخدم مدير فرع، نظهر فقط موظفي فرعه
+        user_roles = UserRole.objects.filter(user=user)
+        for ur in user_roles:
+            if ur.role.name == 'مدير فرع' and ur.location:
+                return Employee.objects.filter(location=ur.location)
+        # الأدوار العالمية (مثل المدير التنفيذي)
+        if user_roles.filter(role__scope='global').exists():
+            return Employee.objects.all()
+        return Employee.objects.none()
