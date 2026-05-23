@@ -1,0 +1,22 @@
+# suppliers/views.py
+from rest_framework import viewsets, permissions
+from .models import Supplier, PurchaseOrder
+from .serializers import SupplierSerializer, PurchaseOrderSerializer
+from permissions_app.permissions import HasRolePermission
+
+class SupplierViewSet(viewsets.ModelViewSet):
+    queryset = Supplier.objects.all()
+    serializer_class = SupplierSerializer
+    permission_classes = [permissions.IsAuthenticated, HasRolePermission]
+    required_resource = 'supplier'
+
+class PurchaseOrderViewSet(viewsets.ModelViewSet):
+    serializer_class = PurchaseOrderSerializer
+    permission_classes = [permissions.IsAuthenticated, HasRolePermission]
+    required_resource = 'purchase_order'
+    
+    def get_queryset(self):
+        user = self.request.user
+        if hasattr(user, 'employee') and user.employee.location:
+            return PurchaseOrder.objects.filter(branch=user.employee.location)
+        return PurchaseOrder.objects.all()
