@@ -1,0 +1,4 @@
+django-admin startproject core .
+python manage.py startapp locations
+python manage.py startapp employees
+python manage.py startapp permissions_app
