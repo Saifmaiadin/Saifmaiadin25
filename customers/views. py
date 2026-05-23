@@ -1,0 +1,26 @@
+# customers/views.py
+from rest_framework import viewsets, permissions
+from .models import Customer
+from .serializers import CustomerSerializer
+from permissions_app.permissions import HasRolePermission
+
+class CustomerViewSet(viewsets.ModelViewSet):
+    serializer_class = CustomerSerializer
+    permission_classes = [permissions.IsAuthenticated, HasRolePermission]
+    required_resource = 'customer'
+    
+    def get_queryset(self):
+        user = self.request.user
+        # مدير فرع يرى عملاء فرعه فقط
+        if hasattr(user, 'employee') and user.employee.location:
+            return Customer.objects.filter(responsible_branch=user.employee.location)
+        # المدير التنفيذي يرى الكل
+        if user.is_superuser:
+            return Customer.objects.all()
+        # غير مسموح
+        return Customer.objects.none()
+    
+    def perform_create(self, serializer):
+        # تعيين الفرع المسؤول تلقائيًا من الموظف الحالي
+        branch = self.request.user.employee.location if hasattr(self.request.user, 'employee') else None
+        serializer.save(responsible_branch=branch)
