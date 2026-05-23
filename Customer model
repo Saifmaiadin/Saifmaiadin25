@@ -40,3 +40,19 @@ class CustomerContactPerson(models.Model):
     phone = models.CharField(max_length=20)
     email = models.EmailField()
     is_primary = models.BooleanField(default=False)
+# customers/models.py (أضف في نفس الملف)
+class CustomerProduct(models.Model):
+    """منتج مخصص لعميل (اشتراك، استثمار)"""
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='products')
+    product = models.ForeignKey('products.Product', on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+    start_date = models.DateField(auto_now_add=True)
+    end_date = models.DateField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+
+class CustomerService(models.Model):
+    """خدمة مقدمة لعميل"""
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='services')
+    service = models.ForeignKey('products.Service', on_delete=models.CASCADE)
+    start_date = models.DateField(auto_now_add=True)
+    status = models.CharField(max_length=20, choices=[('active', 'نشط'), ('suspended', 'موقف'), ('terminated', 'منتهي')], default='active')
