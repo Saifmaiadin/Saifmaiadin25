@@ -1,0 +1,2 @@
+# apps/suppliers/models.py (أنشئ تطبيق جديد)
+python manage.py startapp suppliers
