@@ -1,0 +1,20 @@
+# suppliers/models.py (أضف)
+from employees.models import Employee
+
+class PurchaseOrder(models.Model):
+    STATUS_CHOICES = [
+        ('draft', 'مسودة'),
+        ('submitted', 'مرسل'),
+        ('approved', 'معتمد'),
+        ('received', 'تم الاستلام'),
+        ('cancelled', 'ملغي'),
+    ]
+    po_number = models.CharField(max_length=50, unique=True)
+    supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE)
+    order_date = models.DateField(auto_now_add=True)
+    expected_date = models.DateField()
+    branch = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='purchase_orders')
+    created_by = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='draft')
+    total_amount = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+    notes = models.TextField(blank=True)
