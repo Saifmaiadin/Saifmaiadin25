@@ -1,0 +1,99 @@
+# locations/models.py (أضف هذا)
+class Department(models.Model):
+    name = models.CharField(max_length=255)  # مالية، موارد بشرية، إلخ
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, related_name='departments')
+    manager = models.ForeignKey('employees.Employee', on_delete=models.SET_NULL, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.location.name}"# locations/models.py
+from django.db import models
+
+class Location(models.Model):
+    LOCATION_TYPES = [
+        ('branch', 'فرع'),
+        ('factory', 'مصنع'),
+        ('warehouse', 'مخزن'),
+        ('office', 'مكتب إداري'),
+    ]
+    name = models.CharField(max_length=255)
+    location_type = models.CharField(max_length=20, choices=LOCATION_TYPES)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    address = models.TextField()
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name# locations/models.py
+from django.db import models
+
+class Location(models.Model):
+    LOCATION_TYPES = [
+        ('branch', 'فرع'),
+        ('factory', 'مصنع'),
+        ('warehouse', 'مخزن'),
+        ('office', 'مكتب إداري'),
+    ]
+    name = models.CharField(max_length=255)
+    location_type = models.CharField(max_length=20, choices=LOCATION_TYPES)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    address = models.TextField()
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name# locations/models.py
+from django.db import models
+
+class Location(models.Model):
+    LOCATION_TYPES = [
+        ('branch', 'فرع'),
+        ('factory', 'مصنع'),
+        ('warehouse', 'مخزن'),
+        ('office', 'مكتب إداري'),
+    ]
+    name = models.CharField(max_length=255)
+    location_type = models.CharField(max_length=20, choices=LOCATION_TYPES)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    address = models.TextField()
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name# locations/models.py
+from django.db import models
+
+class Location(models.Model):
+    LOCATION_TYPES = [
+        ('branch', 'فرع'),
+        ('factory', 'مصنع'),
+        ('warehouse', 'مخزن'),
+        ('office', 'مكتب إداري'),
+    ]
+    name = models.CharField(max_length=255)
+    location_type = models.CharField(max_length=20, choices=LOCATION_TYPES)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    address = models.TextField()
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name# locations/models.py
+from django.db import models
+
+class Location(models.Model):
+    LOCATION_TYPES = [
+        ('branch', 'فرع'),
+        ('factory', 'مصنع'),
+        ('warehouse', 'مخزن'),
+        ('office', 'مكتب إداري'),
+    ]
+    name = models.CharField(max_length=255)
+    location_type = models.CharField(max_length=20, choices=LOCATION_TYPES)
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
+    address = models.TextField()
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
