@@ -1,0 +1,21 @@
+# permissions_app/models.py
+from django.db import models
+from django.contrib.auth.models import User
+from locations.models import Location
+
+class Role(models.Model):
+    SCOPE_CHOICES = [
+        ('global', 'صلاحية على كل الشركة'),
+        ('location_only', 'صلاحية داخل موقع/فرع محدد فقط'),
+    ]
+    name = models.CharField(max_length=100, unique=True)  # مدير فرع، محاسب، مشغل مصنع
+    scope = models.CharField(max_length=20, choices=SCOPE_CHOICES)
+    permissions = models.JSONField(default=dict)  # مثال: {"employee": ["read", "update"], "product": ["create"]}
+
+class UserRole(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    role = models.ForeignKey(Role, on_delete=models.CASCADE)
+    location = models.ForeignKey(Location, on_delete=models.CASCADE, null=True, blank=True)  # إذا كان النطاق location_only
+
+    class Meta:
+        unique_together = ('user', 'role', 'location')
