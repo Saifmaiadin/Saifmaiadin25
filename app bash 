@@ -1,0 +1,2 @@
+python manage.py startapp customers
+python manage.py startapp products
