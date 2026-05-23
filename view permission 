@@ -1,0 +1,22 @@
+# permissions_app/permissions.py
+from rest_framework.permissions import BasePermission
+
+class HasRolePermission(BasePermission):
+    def has_permission(self, request, view):
+        # تحقق إذا كان المستخدم لديه دور يسمح بفعل معين
+        # هذا مثال مبسط - يمكنك توسيعه لقراءة الـ permissions من JSON
+        required_resource = getattr(view, 'required_resource', None)
+        required_action = getattr(view, 'required_action', None)
+        if not required_resource or not required_action:
+            return True
+        user_roles = UserRole.objects.filter(user=request.user)
+        for ur in user_roles:
+            perms = ur.role.permissions.get(required_resource, [])
+            if required_action in perms:
+                # إذا كان النطاق location_only، يجب أن يكون request.location ضمن صلاحياته
+                if ur.role.scope == 'global':
+                    return True
+                elif ur.role.scope == 'location_only' and hasattr(request, 'location_id'):
+                    if ur.location_id == request.location_id:
+                        return True
+        return False
